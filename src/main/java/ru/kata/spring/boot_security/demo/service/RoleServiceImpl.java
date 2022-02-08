@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 
+import java.util.List;
 import java.util.Set;
 
 @Transactional
@@ -18,22 +19,27 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Set<Role> getAllRoles() {
+    public void addRole(Role role) {
+        roleRepository.save(role);
+    }
+
+    @Override
+    public void updateRole(Role role) {
+        roleRepository.save(role);
+    }
+
+    @Override
+    public void removeRoleById(long id) {
+        roleRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Role> getAllRoles() {
         return roleRepository.findAll();
     }
 
     @Override
-    public Role getRoleByID(Long id) {
-        return roleRepository.findRoleById(id);
-    }
-
-    @Override
     public Role getRoleByName(String name) {
-        return roleRepository.findRoleByRole(name);
-    }
-
-    @Override
-    public void addRole(Role role) {
-        roleRepository.save(role);
+        return roleRepository.findByName(name);
     }
 }

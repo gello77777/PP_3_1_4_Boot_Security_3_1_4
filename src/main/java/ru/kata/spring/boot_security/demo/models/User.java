@@ -26,31 +26,31 @@ public class User implements UserDetails {
     private String city;
 
     @Column(name = "password", nullable = false)
-    private String pass;
+    private String password;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(
             name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+            joinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "roles_id", referencedColumnName = "id"))
     private Set<Role> roles;
 
     public void setPassword(String pass) {
-        this.pass = pass;
+        this.password = pass;
     }
 
     public User() {
     }
-    public User(String name,  int age, String city, String pass, Set<Role> roles){
-        this(name, age, city, pass);
+    public User(String name, int age, String city, String password, Set<Role> roles){
+        this(name, age, city, password);
         this.roles = roles;
     }
 
-    public User(String name, int age, String city,  String pass) {
+    public User(String name, int age, String city,  String password) {
         this.name = name;
         this.age = age;
         this.city = city;
-        this.pass = pass;
+        this.password = password;
 
     }
 
@@ -120,7 +120,7 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return pass;
+        return password;
     }
 
     @Override
@@ -153,11 +153,11 @@ public class User implements UserDetails {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return age == user.age && id.equals(user.id) && name.equals(user.name) && city.equals(user.city) && pass.equals(user.pass) && Objects.equals(roles, user.roles);
+        return age == user.age && id.equals(user.id) && name.equals(user.name) && city.equals(user.city) && password.equals(user.password) && Objects.equals(roles, user.roles);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, city, age, pass, roles);
+        return Objects.hash(id, name, city, age, password, roles);
     }
 }

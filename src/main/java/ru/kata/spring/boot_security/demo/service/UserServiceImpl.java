@@ -24,52 +24,51 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public List<User> getAllUser() {
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
+
     @Override
-    public void addUser(User u) {
-        u.setPassword(passwordEncoder.encode(u.getPassword()));
-        userRepository.save(u);
+    public void addUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteUserById(long id) {
         userRepository.deleteById(id);
     }
 
+
     @Override
-    public User getUserById(Long id) {
-        return userRepository.findUserById(id);
+    public User getUserById(long id) {
+        return userRepository.getUserById(id);
     }
 
     @Override
-    public void updateUser(User u) {
-        String passwordFromForm = u.getPassword();
-        String encodedPasswordFromBase = userRepository.findUserById(u.getId()).getPassword();
+    public void updateUser(User user) {
+        String passwordFromForm = user.getPassword();
+        String encodedPasswordFromBase = userRepository.getUserById(user.getId()).getPassword();
         if(passwordFromForm.length() == 0 || passwordFromForm.equals(encodedPasswordFromBase)) {
-            u.setPassword(encodedPasswordFromBase);
+            user.setPassword(encodedPasswordFromBase);
         } else {
             if(passwordEncoder.matches(passwordFromForm, encodedPasswordFromBase)){
-                u.setPassword(encodedPasswordFromBase);
+                user.setPassword(encodedPasswordFromBase);
             } else {
-                u.setPassword(passwordEncoder.encode(passwordFromForm));
+                user.setPassword(passwordEncoder.encode(passwordFromForm));
             }
         }
-        userRepository.save(u);
+        userRepository.save(user);
     }
 
-    @Override
-    public User getByName(String name) {
-        return userRepository.findUserByName(name);
-    }
+
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserDetails user = userRepository.findUserByName(username);
+    public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
+        User user = userRepository.findByName(name);
         if (user == null) {
-            throw new UsernameNotFoundException("Could not find user with that name");
+            throw new UsernameNotFoundException(name);
         }
         return user;
     }
